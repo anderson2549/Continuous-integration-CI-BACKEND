@@ -1,11 +1,28 @@
-version: '3.8'
- 
+version: "3.9"
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: backend_app
+  db_mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: miapp
+    ports:
+      - "3307:3306"
+    networks:
+      - red_net
+
+  app_persona:
+    build: .
+    depends_on:
+      - db_mysql
     ports:
       - "8080:8080"
-    command: ["sh", "-c", "cp /app/.env.example /app/.env && npm start"]
+    networks:
+      - red_net
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db_mysql:3306/miapp
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+
+networks:
+  red_net:
+    driver: bridge
