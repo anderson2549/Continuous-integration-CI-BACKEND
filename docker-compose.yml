@@ -1,3 +1,4 @@
+version: "3.9"
 services:
   db_mysql:
     image: mysql:8
@@ -8,16 +9,11 @@ services:
       - "3307:3306"
     networks:
       - red_net
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      timeout: 5s
-      retries: 10
 
   app_persona:
-    image: backend-app:latest
+    build: .
     depends_on:
-      db_mysql:
-        condition: service_healthy
+      - db_mysql
     ports:
       - "8080:8080"
     networks:
