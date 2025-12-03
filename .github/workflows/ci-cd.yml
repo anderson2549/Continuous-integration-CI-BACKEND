@@ -55,11 +55,11 @@ jobs:
 
     - name: Stop and remove old containers
       run: |
-        docker-compose down || true
+        docker compose down || true
         docker rm -f backend-container || true
 
     - name: Start services with Docker Compose
-      run: docker-compose up -d
+      run: docker compose up -d
 
     - name: Wait for application
       run: sleep 30
@@ -70,4 +70,4 @@ jobs:
 
     - name: Show logs
       if: failure()
-      run: docker-compose logs
+      run: docker compose logs
